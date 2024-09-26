@@ -1,7 +1,30 @@
-import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
 export class CreateUserTable1680567890123 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+
+        await queryRunner.createTable(
+          new Table({
+            name: 'roles',
+            columns: [
+              {
+                name: 'id',
+                type: 'int',
+                isPrimary: true,
+                isGenerated: true,
+                generationStrategy: 'increment',
+              },
+              {
+                name: 'name',
+                type: 'varchar',
+                length: '255',
+                isNullable: false,
+                isUnique: true,
+              },
+            ],
+          }),
+          true
+        );
         // Create the 'users' table
         await queryRunner.createTable(
           new Table({
@@ -111,5 +134,6 @@ export class CreateUserTable1680567890123 implements MigrationInterface {
 
         // Drop the 'users' table
         await queryRunner.dropTable('users');
+        await queryRunner.dropTable('roles');
     }
 }
